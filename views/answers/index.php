@@ -26,7 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'userName',
                 'format' => 'html',
                 'value' => function ($model) {
-                    return Html::a($model->userName,Url::toRoute([
+                    return Html::a(
+                        $model->getUserName(),
+                        Url::toRoute([
                         'user/view',
                         'id' => $model->user_id,
                     ]));
@@ -37,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'html',
                 'value' => function ($model) {
                     return Html::a(
-                        $model->anketsName,
+                        $model->getAnketsName(),
                         Url::toRoute([
                             'ankets/view',
                             'id' => $model->ankets_id,

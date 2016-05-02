@@ -20,7 +20,7 @@ class UserAnswersSearch extends UserAnswers
     {
         return [
             [['user_id','ankets_id'], 'integer'],
-            [['anketsName','userName','userNames'], 'string'],
+            [['anketsName','userName'], 'string'],
         ];
     }
 
@@ -42,7 +42,7 @@ class UserAnswersSearch extends UserAnswers
      */
     public function search($params)
     {
-        $query = UserAnswers::find()
+        $query = UserAnswers::find();/*
             ->select([
                 'user_id'=>'user.id',
                 'ankets_id' => 'ankets.id',
@@ -54,7 +54,7 @@ class UserAnswersSearch extends UserAnswers
                 'user',
                 'user_answers.ankets_id = ankets.id
                 AND user_answers.user_id = user.id');
-
+*/
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -63,18 +63,29 @@ class UserAnswersSearch extends UserAnswers
 
         $dataProvider->setSort([
             'attributes' => [
-                'userName',
-                'anketsName'
+                'userName' =>[
+                    'asc' => ['user.username' => SORT_ASC ],
+                    'desc' => ['user.username' => SORT_DESC ],
+                    'default' => SORT_ASC
+                ],
+                'anketsName' =>[
+                    'asc' => ['ankets.name' => SORT_ASC ],
+                    'desc' => ['ankets.name' => SORT_DESC ],
+                ],
             ]
         ]);
 
         $this->load($params);
-
+        $query->joinWith('ankets');
+        $query->joinWith('user');
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
+
             return $dataProvider;
         }
+
+
 
 
         $query->andFilterWhere(['like', 'user.username', $this->userName])

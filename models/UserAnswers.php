@@ -13,13 +13,13 @@ use Yii;
  * @property string $userNames
  * @property int $ankets_id
  * @property string $anketsName
- * @property app/models/User $user
+ * @property app\models\User $user
+ * @property app\models\Ankets $ankets
  */
 class UserAnswers extends \yii\db\ActiveRecord
 {
     public $anketsName;
     public $userName;
-    public $userNames;
     /**
      * @inheritdoc
      */
@@ -28,22 +28,22 @@ class UserAnswers extends \yii\db\ActiveRecord
         return 'user_answers';
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::className(),['id' => 'user_id']);
+    }
+
+    public function getAnkets()
+    {
+        return $this->hasOne(Ankets::className(),['id' => 'ankets_id']);
+    }
+
     public function getUserName(){
-        if (!$this->userName) {
-            $user =  $this->user_id ? User::findOne($this->user_id) : null;
-            return $user ? $user->username : null;
-        } else {
-            return $this->userName;
-        }
+       return $this->user->username;
     }
 
     public function getAnketsName(){
-        if (!$this->anketsName) {
-            $anket = $this->ankets_id ? Ankets::findOne($this->ankets_id) : null;
-            return $anket ? $anket->name : null;
-        }else {
-            return $this->anketsName;
-        }
+        return $this->ankets->name;
     }
 
     /**
