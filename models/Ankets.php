@@ -72,7 +72,7 @@ class Ankets extends \yii\db\ActiveRecord
             $db = Yii::$app->db;
             $transaction = $db->beginTransaction();
 
-            try {;
+            try {
                 $questionsTableName = "questions_{$this->table_name}";
 
                 $db->createCommand()->createTable(
@@ -81,11 +81,12 @@ class Ankets extends \yii\db\ActiveRecord
                        'id' => 'pk',
                        'column_name' => 'string',
                        'question_text' => 'string',
-                    ]
+                    ],
+                    'ENGINE = InnoDB'
                 )->execute();
 
                 $answerFields = [
-                    'user_id' => 'pk',
+                    'user_id' => 'int(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY',
                 ];
 
 
@@ -101,14 +102,36 @@ class Ankets extends \yii\db\ActiveRecord
 
                 $db->createCommand()->createTable(
                     "answers_{$this->table_name}",
-                    $answerFields
+                    $answerFields,
+                    'ENGINE = InnoDB'
+                )->execute();
+
+                $db->createCommand()->addForeignKey(
+                    "fk_{$this->table_name}",
+                    "answers_{$this->table_name}",
+                    'user_id',
+                    'user',
+                    'id',
+                    'CASCADE',
+                    'CASCADE'
                 )->execute();
 
                 $transaction->commit();
 
             } catch(\Exception $e) {
-                Yii::trace('error');
+
+                if ($db->getTableSchema("answers_{$this->table_name}") !== null)
+                    $db->createCommand()
+                        ->dropTable("answers_{$this->table_name}")
+                        ->execute();
+
+                if ($db->getTableSchema("questions_{$this->table_name}") !== null)
+                    $db->createCommand()
+                        ->dropTable("questions_{$this->table_name}")
+                        ->execute();
+
                 $transaction->rollBack();
+
                 throw $e;
             }
             return true;

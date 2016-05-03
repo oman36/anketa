@@ -42,20 +42,7 @@ class UserAnswersSearch extends UserAnswers
      */
     public function search($params)
     {
-        $query = UserAnswers::find();/*
-            ->select([
-                'user_id'=>'user.id',
-                'ankets_id' => 'ankets.id',
-                'userName' => 'user.username',
-                'anketsName' => 'ankets.name'
-            ])
-            ->join('join','ankets')
-            ->join('join',
-                'user',
-                'user_answers.ankets_id = ankets.id
-                AND user_answers.user_id = user.id');
-*/
-        // add conditions that should always apply here
+        $query = UserAnswers::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -84,9 +71,6 @@ class UserAnswersSearch extends UserAnswers
 
             return $dataProvider;
         }
-
-
-
 
         $query->andFilterWhere(['like', 'user.username', $this->userName])
             ->andFilterWhere(['like', 'ankets.name', $this->anketsName]);

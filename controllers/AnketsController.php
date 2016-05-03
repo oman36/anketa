@@ -97,6 +97,7 @@ class AnketsController extends Controller
             ],'no') && $user_answers->validate()
             : true;
 
+        $answers->user_id = $user_id;
         if ($answers->load(Yii::$app->request->post())
             && $answers->validate()
             && $user_answers_add

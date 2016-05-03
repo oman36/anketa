@@ -53,11 +53,7 @@ class UserAnswers extends \yii\db\ActiveRecord
     {
         return [
             [['user_id','ankets_id'], 'integer'],
-            [
-                ['user_id','ankets_id'],
-                'unique',
-                'message' => 'Пользователь с таким именем уже заполнил анкету',
-            ],
+
         ];
     }
 

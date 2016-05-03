@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         Url::toRoute([
                             'answers/view',
                             'id' => $model->user_id,
-                            'name' => 'first',
+                            'name' => $model->ankets->table_name,
                         ]),
                         [
                             'class' => 'btn btn-info',
