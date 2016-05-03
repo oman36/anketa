@@ -10,7 +10,7 @@ Anketa
 
 ```sql
 CREATE TABLE IF NOT EXISTS `anketa`.`user` (
-	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
 	`username` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
 	`password` VARCHAR(33) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
 	`role` ENUM('user','admin','superadmin') NOT NULL DEFAULT 'user' ,
@@ -19,18 +19,19 @@ CREATE TABLE IF NOT EXISTS `anketa`.`user` (
  ) ENGINE = InnoDB;
 
  CREATE TABLE IF NOT EXISTS `anketa`.`ankets` (
-	 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+	 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
 	 `table_name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
 	 `name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
 	 PRIMARY KEY (`id`)
  ) ENGINE = InnoDB;
 
  CREATE TABLE IF NOT EXISTS `anketa`.`user_answers` (
-	 `ankets_id` INT(5) NOT NULL ,
-	 `user_id` INT(5) NOT NULL ,
-	 PRIMARY KEY (`ankets_id`, `user_id`)
+	`ankets_id` INT(10) UNSIGNED NOT NULL ,
+	`user_id` INT(10) UNSIGNED NOT NULL ,
+	PRIMARY KEY (`ankets_id`, `user_id`)
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+	FOREIGN KEY (`ankets_id`) REFERENCES `ankets`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
  ) ENGINE = InnoDB;
 ```
 
 **Заметки:**
-- Не стоит удалять пользователей, заполнивших анкеты :)
